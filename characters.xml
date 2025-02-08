@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<characters>
+  <character>
+    <name>Bob</name>
+    <stats>
+      <luck>10.0</luck>
+      <strength>10.0</strength>
+      <durability>5.0</durability>
+      <speed>1.0</speed>
+    </stats>
+    <spells/>
+  </character>
+</characters>
