@@ -11,4 +11,15 @@
     </stats>
     <spells/>
   </character>
+  <character>
+    <name>Alice</name>
+    <stats>
+      <luck>10</luck>
+      <strength>10</strength>
+      <durability>5</durability>
+      <speed>1</speed>
+      <intellect>1</intellect>
+    </stats>
+    <spells/>
+  </character>
 </characters>

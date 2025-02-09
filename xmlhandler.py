@@ -79,13 +79,15 @@ class XMLHandler:
             root = tree.getroot()
             for character in root.findall('character'):
                 name = character.find('name').text
+                health = int(character.find('health').text)
+                stamina = int(character.find('stamina').text)
                 stats = {stat.tag: int(stat.text) for stat in character.find('stats')}
                 spells = []
                 for spell in character.findall('spell'):
                     spell = next((s for s in spell_list if s.name == spell.text), None)
                     if spell:
                         spells.append(spell)
-                characters.append(Character(name, stats, spells))
+                characters.append(Character(name, health, stamina, stats, spells))
         except FileNotFoundError:
             print(f"XML file '{file_path}' not found. Starting fresh.")
         except Exception as e:
@@ -112,6 +114,10 @@ class XMLHandler:
         character_element = ET.Element('character')
         name_element = ET.SubElement(character_element,'name')
         name_element.text = character.name
+        health_element = ET.SubElement(character_element,'health')
+        health_element.text = str(character.health)
+        stamina_element = ET.SubElement(character_element,'stamina')
+        stamina_element.text = str(character.stamina)
         stats_element = ET.SubElement(character_element,'stats')
         for stat, value in character.stats.items():
             stat_elem = ET.SubElement(stats_element, stat)

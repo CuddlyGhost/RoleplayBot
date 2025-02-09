@@ -110,11 +110,15 @@ async def listspells(ctx):
     await ctx.send(f'All spells:\n{spell_list}')
 
 #Create a new character
-@bot.command(name='create_character', help='This command creates a new character. Example: !create_character Bob intellect:10 strength:5')
+@bot.command(name='create_character', help='This command creates a new character. Example: !create_character Bob 1000(Health) 200(Stamina) intellect:10 strength:5 durability:10 speed:5 luck:5')
 async def createcharacter(ctx, name: str, health:int, stamina:int, *scaling_pairs):
     if name in [character.name for character in all_characters]:
         await ctx.send(f"Character '{name}' already exists.")
         return
+    if health is None or stamina is None or health <= 0 or stamina <= 0:
+        await ctx.send('Health and stamina must be greater than 0.')
+        return
+
     #Parsing scaling input
     scaling = {}
     for pair in scaling_pairs:
@@ -140,7 +144,7 @@ async def createcharacter(ctx, name: str, health:int, stamina:int, *scaling_pair
 
     #Update in-memory character list
     all_characters.append(new_character)
-    await ctx.send(f"Character '{name}' created with stats: {scaling}")
+    await ctx.send(f"Character '{name}' created with stats: {new_character.__str__()}")
 
 #Remove a character
 @bot.command(name='remove_character', help='This command removes a character. Example: !remove_character Bob')
