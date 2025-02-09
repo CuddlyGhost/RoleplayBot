@@ -7,11 +7,13 @@ from update import updatecharacter
 # Defining global variables
 from globals import *
 
-def is_admin():
-    """Custom check for permission 'Administrator'."""
-    async def predicate(ctx : commands.Context):
-        return any(ctx.author._permissions.as_integer_ratio() == 'Administrator')
-    return commands.check(predicate)
+async def is_admin(ctx: commands.Context) -> bool:
+    # Make sure the command is not in a DM.
+    if ctx.guild is None:
+        await ctx.send("This command can only be used in a server.")
+        return False
+    # Check if the author has administrator permission.
+    return ctx.author.guild_permissions.administrator
 
 class Admin(commands.Cog):
     def __init__(self, bot):
@@ -39,7 +41,7 @@ class Admin(commands.Cog):
 
         #Update in-memory spell list
         all_spells.append(new_spell)
-        await ctx.send(f"Spell '{name}'; {new_spell} {scaling}") 
+        await ctx.send(f"Spell '{name}'; {new_spell}") 
 
     @commands.command(name='remove_spell', help='This command removes a spell from the spell-list. Example: !removespell Fireball')
     async def removespell(ctx, name: str):
@@ -168,6 +170,9 @@ class Admin(commands.Cog):
         #Update in-memory character list
         all_characters.remove(character)
         await ctx.send(f"Character '{name}' removed.")
+    
+    async def cog_check(self, ctx: commands.Context):
+        return await is_admin(ctx)
 
 
 def setup(bot):
