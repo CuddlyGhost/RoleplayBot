@@ -10,6 +10,9 @@ class Spell:
     
     def calculate_damage(self, *attributes):
         damage = 0
-        for attr, scale in self.scaling.items():
-            damage += attributes[attr] * scale
+        for attr, factor in self.scaling.items():
+            for scale in attributes:
+                if attr in scale:
+                    damage += scale[attr] * factor
+        damage -= (damage * scale['durability']) / 100
         return damage

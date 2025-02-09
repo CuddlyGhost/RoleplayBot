@@ -1,24 +1,54 @@
 <?xml version="1.0" ?>
 <characters>
   <character>
-    <name>Bob</name>
+    <author>John Doe</author>
+    <name>Alice</name>
+    <health>1000</health>
+    <current_health>550</current_health>
+    <stamina>200</stamina>
+    <current_stamina>180</current_stamina>
     <stats>
-      <luck>10</luck>
-      <strength>10</strength>
-      <durability>5</durability>
-      <speed>1</speed>
-      <intellect>1</intellect>
+      <intellect>10</intellect>
+      <strength>5</strength>
+      <durability>10</durability>
+      <speed>5</speed>
+      <luck>5</luck>
     </stats>
-    <spells/>
+    <spells>
+      <spell>Fireball</spell>
+    </spells>
   </character>
   <character>
-    <name>Alice</name>
+    <author>cuddly_ghost</author>
+    <name>Bob</name>
+    <health>1000</health>
+    <current_health>985</current_health>
+    <stamina>200</stamina>
+    <current_stamina>199</current_stamina>
     <stats>
-      <luck>10</luck>
-      <strength>10</strength>
-      <durability>5</durability>
-      <speed>1</speed>
-      <intellect>1</intellect>
+      <intellect>10</intellect>
+      <strength>5</strength>
+      <durability>10</durability>
+      <speed>5</speed>
+      <luck>5</luck>
+    </stats>
+    <spells>
+      <spell>Snowball</spell>
+    </spells>
+  </character>
+  <character>
+    <author>just._reaper</author>
+    <name>Kaito</name>
+    <health>1000</health>
+    <current_health>1000</current_health>
+    <stamina>200</stamina>
+    <current_stamina>200</current_stamina>
+    <stats>
+      <intellect>10</intellect>
+      <strength>5</strength>
+      <durability>10</durability>
+      <speed>5</speed>
+      <luck>5</luck>
     </stats>
     <spells/>
   </character>

@@ -1,20 +1,20 @@
 <?xml version="1.0" ?>
 <spells>
   <spell>
-    <name>Snowball</name>
+    <name>Fireball</name>
     <scaling>
       <intellect>1.5</intellect>
       <strength>0.3</strength>
     </scaling>
-    <cooldown>3</cooldown>
-    <stamina_cost>30</stamina_cost>
+    <cooldown>5</cooldown>
+    <stamina_cost>20</stamina_cost>
   </spell>
   <spell>
-    <name>Fireball</name>
+    <name>Snowball</name>
     <scaling>
-      <intellect>3.0</intellect>
+      <intellect>50.0</intellect>
     </scaling>
-    <cooldown>5</cooldown>
-    <stamina_cost>50</stamina_cost>
+    <cooldown>1</cooldown>
+    <stamina_cost>1</stamina_cost>
   </spell>
 </spells>
