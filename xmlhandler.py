@@ -18,14 +18,17 @@ class XMLHandler:
                 cooldown = int(spell.find('cooldown').text)
                 stamina_cost = int(spell.find('stamina_cost').text)
                 scaling = {}
-                for scale in spell.findall('scaling'):
-                    scaling[scale.find('attribute').text] = float(scale.find('value').text)
-                spells.append(Spell(name, scaling, cooldown, stamina_cost))
+                scaling_element = spell.find('scaling')
+                if scaling_element is not None:
+                    for stat_element in scaling_element:
+                        scaling[stat_element.tag] = float(stat_element.text)
+                spell_obj = Spell(name, scaling, cooldown, stamina_cost)
+                spells.append(spell_obj)
         except FileNotFoundError:
             print(f"XML file '{file_path}' not found. Starting fresh.")
         except Exception as e:
             print(f"Error loading spells from XML: {e}")
-            return spells
+        return spells
     
     @staticmethod
     def save_spell(file_path, spell):

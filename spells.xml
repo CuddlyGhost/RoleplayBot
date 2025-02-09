@@ -9,4 +9,12 @@
     <cooldown>3</cooldown>
     <stamina_cost>30</stamina_cost>
   </spell>
+  <spell>
+    <name>Fireball</name>
+    <scaling>
+      <intellect>3.0</intellect>
+    </scaling>
+    <cooldown>5</cooldown>
+    <stamina_cost>50</stamina_cost>
+  </spell>
 </spells>

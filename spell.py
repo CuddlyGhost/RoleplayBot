@@ -8,7 +8,7 @@ class Spell:
     def __str__(self):
         return f'Spell statistics of {self.name}:\n{self.scaling}\nCooldown: {self.cooldown}\nStamina cost: {self.stamina_cost}'
     
-    def calculate_damage(self, attributes):
+    def calculate_damage(self, *attributes):
         damage = 0
         for attr, scale in self.scaling.items():
             damage += attributes[attr] * scale

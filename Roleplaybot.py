@@ -66,27 +66,67 @@ async def addspell(ctx, name: str, cooldown: int, stamina_cost: int, *scaling_pa
     all_spells.append(new_spell)
     await ctx.send(f"Spell '{name}'; {new_spell} {scaling}") 
 
+@bot.command(name='remove_spell', help='This command removes a spell from the spell-list. Example: !removespell Fireball')
+async def removespell(ctx, name: str):
+    #Find the spell
+    spell = next((spell for spell in all_spells if spell.name == name), None)
+    if spell is None:
+        await ctx.send(f"Spell '{name}' not found.")
+        return
+
+    #Remove the spell from the XML file
+    XMLHandler.remove_spell(spell_path, spell)
+
+    #Update in-memory spell list
+    all_spells.remove(spell)
+    await ctx.send(f"Spell '{name}' removed.")
+
+@bot.command(name='give_spell', help='This command adds a spell to a character. Example: !give_spell Bob Fireball')
+async def addspelltocharacter(ctx, character_name: str, spell_name: str):
+    #Find the character
+    character = next((character for character in all_characters if character.name == character_name), None)
+    if character is None:
+        await ctx.send(f"Character '{character_name}' not found.")
+        return
+
+    #Find the spell
+    spell = next((spell for spell in all_spells if spell.name == spell_name), None)
+    if spell is None:
+        await ctx.send(f"Spell '{spell_name}' not found.")
+        return
+
+    #Add the spell to the character
+    character.add_spell(spell)
+
+    #Save the character to the XML file
+    XMLHandler.save_character(character_path, character)
+
+    await ctx.send(f"Spell '{spell_name}' added to character '{character_name}'.")
+
 #List all spells
 @bot.command(name='list_spells', help='This command lists all spells.')
 async def listspells(ctx):
-    spell_list = '\n'.join([str(spell) for spell in all_spells])
+    spell_list = '\n\n'.join([str(spell) for spell in all_spells])
     await ctx.send(f'All spells:\n{spell_list}')
 
 #Create a new character
 @bot.command(name='create_character', help='This command creates a new character. Example: !create_character Bob intellect:10 strength:5')
 async def createcharacter(ctx, name: str, health:int, stamina:int, *scaling_pairs):
+    if name in [character.name for character in all_characters]:
+        await ctx.send(f"Character '{name}' already exists.")
+        return
     #Parsing scaling input
     scaling = {}
     for pair in scaling_pairs:
         try:
             attr, value = pair.split(":")
-            scaling[attr] = float(value)
+            scaling[attr] = int(value)
         except ValueError:
             await ctx.send('Invalid scaling format: ' + scaling)
             return
 
     # Ensure that the required scaling pairs are provided
-    missing_scalings = [scaling for scaling in REQUIRED_SCALINGS if scaling not in scaling]
+    missing_scalings = [stat for stat in REQUIRED_SCALINGS if stat not in scaling]
     
     if missing_scalings:
         await ctx.send(f"Error: Missing required scaling stats: {', '.join(missing_scalings)}")
@@ -102,6 +142,49 @@ async def createcharacter(ctx, name: str, health:int, stamina:int, *scaling_pair
     all_characters.append(new_character)
     await ctx.send(f"Character '{name}' created with stats: {scaling}")
 
+#Remove a character
+@bot.command(name='remove_character', help='This command removes a character. Example: !remove_character Bob')
+async def removecharacter(ctx, name: str):
+    #Find the character
+    character = next((character for character in all_characters if character.name == name), None)
+    if character is None:
+        await ctx.send(f"Character '{name}' not found.")
+        return
+
+    #Remove the character from the XML file
+    XMLHandler.remove_character(character_path, character)
+
+    #Update in-memory character list
+    all_characters.remove(character)
+    await ctx.send(f"Character '{name}' removed.")
+
+#List all characters
+@bot.command(name='list_characters', help='This command lists all characters.')
+async def listcharacters(ctx):
+    character_list = '\n\n'.join([str(character) for character in all_characters])
+    await ctx.send(f'All characters:\n{character_list}')
+
+#Attack a character
+@bot.command(name='attack', help='This command attacks a character with a spell. Example: !attack Bob Fireball Target')
+async def attack(ctx, character_name: str, spell_name: str, target_name: str):
+    #Find the character
+    character = next((character for character in all_characters if character.name == character_name), None)
+    if character is None:
+        await ctx.send(f"Character '{character_name}' not found.")
+        return
+    if target_name not in all_characters:
+        await ctx.send(f"Target '{target_name}' not found.")
+
+    #Find the spell
+    character_spells = character.spells
+    spell = next((spell for spell in character_spells if spell.name == spell_name), None)
+    if spell is None:
+        await ctx.send(f"Spell '{spell_name}' not found in Bob's usable spells.")
+        return
+
+    #Calculate the damage
+    damage = spell.calculate_damage(**character.stats)
+    await ctx.send(f"Character '{character_name}' attacked with spell '{spell_name}' for {damage} damage.")
 #Special commands
 #Roleplay attack recognition
 @bot.event
